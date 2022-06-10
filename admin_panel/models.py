@@ -37,6 +37,7 @@ class Product(models.Model):
 
 
 class OrderItem(models.Model):
+    order_id = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Номер заказа')
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Название продукта')
     quantity = models.IntegerField(verbose_name='Количество', validators=[MinValueValidator(1)])
     price = models.FloatField(verbose_name='Цена', validators=[MinValueValidator(0)])
