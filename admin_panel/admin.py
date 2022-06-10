@@ -10,7 +10,14 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'status', 'get_customer_name', 'get_customer_phone_number', 'get_customer_email', 'address')
+    list_display = (
+        'id',
+        'status',
+        'get_customer_name',
+        'get_customer_phone_number',
+        'get_customer_email',
+        'address',
+        'created_at')
 
     @admin.display(description='Заказчик')
     def get_customer_name(self, obj: Order):
