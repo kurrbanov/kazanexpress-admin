@@ -1,31 +1,12 @@
 from django.contrib import admin
 
 from admin_panel.models import Customer, Order
+from admin_panel.filters import OrderStatusFilter
 
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone_number', 'email')
-
-
-class OrderStatusFilter(admin.SimpleListFilter):
-    title = 'По статусу заказа'
-    parameter_name = 'status'
-
-    def lookups(self, request, model_admin):
-        return [
-            ('Создан', 'Создан'),
-            ('Собирается', 'Собирается'),
-            ('Доставляется', 'Доставляется'),
-            ('Доставлен', 'Доставлен'),
-            ('Выдан', 'Выдан'),
-            ('Отменён', 'Отменён'),
-        ]
-
-    def queryset(self, request, queryset):
-        if self.value() is None:
-            return queryset
-        return queryset.filter(status=self.value())
 
 
 @admin.register(Order)
