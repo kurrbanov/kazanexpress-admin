@@ -10,7 +10,7 @@
                     <input type="hidden" name="{{ k }}" value="{{ v }}"/>
                 {% endfor %}
 
-                <input type="text" value="{{ spec.value|default_if_none:'' }}" name="{{ spec.parameter_name }}" placeholder="До"/>
+                <input type="text" value="{{ spec.value|default_if_none:'' }}" name="{{ spec.parameter_name }}" placeholder={{ all_choice.placeholder }}/>
                 {% if not all_choice.selected %}
                     <strong><a href="{{ all_choice.query_string }}">{% trans 'Очистить' %}</a></strong>
                 {% endif %}

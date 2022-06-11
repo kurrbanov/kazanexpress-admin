@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from admin_panel.models import Customer, Order
-from admin_panel.filters import OrderStatusFilter, OrderCostFilter
+from admin_panel.filters import OrderStatusFilter, OrderCostFilter, OrderPhoneFilter
 
 
 @admin.register(Customer)
@@ -21,7 +21,7 @@ class OrderAdmin(admin.ModelAdmin):
         'get_order_cost',
         'created_at')
 
-    list_filter = (OrderStatusFilter, 'created_at', OrderCostFilter)
+    list_filter = (OrderStatusFilter, 'created_at', OrderCostFilter, OrderPhoneFilter)
 
     @admin.display(description='Заказчик')
     def get_customer_name(self, obj: Order):

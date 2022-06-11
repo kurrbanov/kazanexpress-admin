@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.db.models import F, Sum
-from django.http.response import HttpResponseBadRequest
 
 from admin_panel.models import Order
 
@@ -27,6 +26,7 @@ class OrderStatusFilter(admin.SimpleListFilter):
 
 class OrderInputFilter(admin.SimpleListFilter):
     template = 'admin/order_input_filter.html'
+    placeholder = ''
 
     def lookups(self, request, model_admin):
         return (),
@@ -37,15 +37,28 @@ class OrderInputFilter(admin.SimpleListFilter):
             (k, v) for k, v in changelist.get_filters_params().items()
             if k != self.parameter_name
         )
+        all_choice['placeholder'] = self.placeholder
         yield all_choice
 
 
 class OrderCostFilter(OrderInputFilter):
     title = 'Стоимость в пределах'
     parameter_name = 'cost'
+    placeholder = 'До'
 
     def queryset(self, request, queryset):
         if self.value() is None or self.value() == '':
             return queryset
         return Order.objects.annotate(mul_result=Sum(F('orderitem__quantity') * F('orderitem__price'))) \
             .filter(mul_result__lte=self.value())
+
+
+class OrderPhoneFilter(OrderInputFilter):
+    title = 'Номер телефона'
+    parameter_name = 'phone_number'
+    placeholder = 'Номер телефона'
+
+    def queryset(self, request, queryset):
+        if self.value() is None or self.value() == '':
+            return queryset
+        return queryset.filter(customer_id__phone_number=self.value())
