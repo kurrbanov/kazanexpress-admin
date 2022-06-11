@@ -10,4 +10,5 @@ COPY . ./
 CMD python wait-postgres.py && \
     python manage.py makemigrations && \
     python manage.py migrate && \
+    python manage.py shell < fill_db.py && \
     python manage.py runserver 0.0.0.0:8000
