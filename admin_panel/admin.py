@@ -1,12 +1,20 @@
 from django.contrib import admin
+from django.db import models
+from django.forms import Textarea
 
-from admin_panel.models import Customer, Order
+from admin_panel.models import Customer, Order, OrderItem
 from admin_panel.filters import OrderStatusFilter, OrderCostFilter, OrderPhoneFilter
 
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone_number', 'email')
+
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 0
+    readonly_fields = ('product_id', 'quantity', 'price')
 
 
 @admin.register(Order)
@@ -23,6 +31,7 @@ class OrderAdmin(admin.ModelAdmin):
     )
     list_filter = (OrderStatusFilter, 'created_at', OrderCostFilter, OrderPhoneFilter)
     readonly_fields = ('status',)
+    inlines = [OrderItemInline]
 
     @admin.display(description='Страница заказа', ordering='id')
     def get_order_page(self, obj: Order):
@@ -46,3 +55,12 @@ class OrderAdmin(admin.ModelAdmin):
         for order_item in obj.orderitem_set.all():
             cost += (order_item.price * order_item.quantity)
         return cost
+
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 2})}
+    }
+
+    class Media:
+        css = {
+            'all': ('css/custom_admin.css',)
+        }
