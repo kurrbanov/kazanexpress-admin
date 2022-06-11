@@ -17,6 +17,7 @@ class OrderAdmin(admin.ModelAdmin):
         'get_customer_phone_number',
         'get_customer_email',
         'address',
+        'get_order_cost',
         'created_at')
 
     @admin.display(description='Заказчик')
@@ -30,3 +31,10 @@ class OrderAdmin(admin.ModelAdmin):
     @admin.display(description='Почта заказчика')
     def get_customer_email(self, obj: Order):
         return obj.customer_id.email
+
+    @admin.display(description='Стоимость заказа')
+    def get_order_cost(self, obj: Order):
+        cost = 0
+        for order_item in obj.orderitem_set.all():
+            cost += (order_item.price * order_item.quantity)
+        return cost
