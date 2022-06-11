@@ -16,7 +16,6 @@ class CustomerAdmin(admin.ModelAdmin):
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
-    readonly_fields = ('product_id', 'quantity', 'price')
 
 
 @admin.action(description='Отменить выбранные заказы')
