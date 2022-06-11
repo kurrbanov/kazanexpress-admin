@@ -18,6 +18,11 @@ class OrderItemInline(admin.TabularInline):
     readonly_fields = ('product_id', 'quantity', 'price')
 
 
+@admin.action(description='Отменить выбранные заказы')
+def cancel_orders(modeladmin, request, queryset):
+    queryset.update(status='Отменён')
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
@@ -34,6 +39,7 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ('status',)
     inlines = [OrderItemInline]
     change_form_template = 'admin/order_change_form.html'
+    actions = [cancel_orders]
 
     @admin.display(description='Страница заказа', ordering='id')
     def get_order_page(self, obj: Order):
