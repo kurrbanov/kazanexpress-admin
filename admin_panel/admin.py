@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.contrib.admin.models import LogEntry, LogEntryManager
+from django.contrib.admin.models import LogEntry
 from django.contrib.admin.options import get_content_type_for_model
 from django.db import models
 from django.forms import Textarea
