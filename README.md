@@ -16,3 +16,6 @@ cp .env.examle .env
 ```
 docker-compose up -d --build
 ```
+
+**NOTE:**  
+Данные для входа в админ панель тоже находятся в ```.env.example```
