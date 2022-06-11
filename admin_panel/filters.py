@@ -25,9 +25,7 @@ class OrderStatusFilter(admin.SimpleListFilter):
         return queryset.filter(status=self.value())
 
 
-class OrderCostFilter(admin.SimpleListFilter):
-    title = 'Стоимость в пределах'
-    parameter_name = 'cost'
+class OrderInputFilter(admin.SimpleListFilter):
     template = 'admin/order_input_filter.html'
 
     def lookups(self, request, model_admin):
@@ -41,10 +39,13 @@ class OrderCostFilter(admin.SimpleListFilter):
         )
         yield all_choice
 
+
+class OrderCostFilter(OrderInputFilter):
+    title = 'Стоимость в пределах'
+    parameter_name = 'cost'
+
     def queryset(self, request, queryset):
         if self.value() is None or self.value() == '':
             return queryset
-        if isinstance(self.value(), str):
-            return HttpResponseBadRequest
         return Order.objects.annotate(mul_result=Sum(F('orderitem__quantity') * F('orderitem__price'))) \
             .filter(mul_result__lte=self.value())
