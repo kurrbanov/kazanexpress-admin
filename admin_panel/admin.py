@@ -19,9 +19,10 @@ class OrderAdmin(admin.ModelAdmin):
         'get_customer_email',
         'address',
         'get_order_cost',
-        'created_at')
-
+        'created_at'
+    )
     list_filter = (OrderStatusFilter, 'created_at', OrderCostFilter, OrderPhoneFilter)
+    readonly_fields = ('status',)
 
     @admin.display(description='Страница заказа', ordering='id')
     def get_order_page(self, obj: Order):
