@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.db.models import F, Sum
 
-from admin_panel.models import Order
-
 
 class OrderStatusFilter(admin.SimpleListFilter):
     title = 'По статусу заказа'
@@ -49,7 +47,7 @@ class OrderCostFilter(OrderInputFilter):
     def queryset(self, request, queryset):
         if self.value() is None or self.value() == '':
             return queryset
-        return Order.objects.annotate(mul_result=Sum(F('orderitem__quantity') * F('orderitem__price'))) \
+        return queryset.annotate(mul_result=Sum(F('orderitem__quantity') * F('orderitem__price'))) \
             .filter(mul_result__lte=self.value())
 
 
@@ -62,3 +60,25 @@ class OrderPhoneFilter(OrderInputFilter):
         if self.value() is None or self.value() == '':
             return queryset
         return queryset.filter(customer_id__phone_number=self.value())
+
+
+class ProductIdFilter(OrderInputFilter):
+    title = 'По ID'
+    parameter_name = 'product_id'
+    placeholder = 'ID'
+
+    def queryset(self, request, queryset):
+        if self.value() is None or self.value() == '':
+            return queryset
+        return queryset.filter(id=self.value())
+
+
+class ProductTitleFilter(OrderInputFilter):
+    title = 'По наименованию'
+    parameter_name = 'product_title'
+    placeholder = 'Название'
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+        return queryset.filter(title__icontains=self.value())

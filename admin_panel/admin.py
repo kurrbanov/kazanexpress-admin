@@ -3,8 +3,9 @@ from django.db import models
 from django.forms import Textarea
 from django.http import HttpResponseRedirect
 
-from admin_panel.models import Customer, Order, OrderItem
-from admin_panel.filters import OrderStatusFilter, OrderCostFilter, OrderPhoneFilter
+from admin_panel.models import Customer, Order, OrderItem, Product
+from admin_panel.filters import OrderStatusFilter, OrderCostFilter, OrderPhoneFilter, ProductIdFilter, \
+    ProductTitleFilter
 
 
 @admin.register(Customer)
@@ -79,3 +80,9 @@ class OrderAdmin(admin.ModelAdmin):
         css = {
             'all': ('css/custom_admin.css',)
         }
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')
+    list_filter = (ProductIdFilter, ProductTitleFilter)
