@@ -12,7 +12,7 @@ class CustomerAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
+        'get_order_page',
         'status',
         'get_customer_name',
         'get_customer_phone_number',
@@ -22,6 +22,10 @@ class OrderAdmin(admin.ModelAdmin):
         'created_at')
 
     list_filter = (OrderStatusFilter, 'created_at', OrderCostFilter, OrderPhoneFilter)
+
+    @admin.display(description='Страница заказа', ordering='id')
+    def get_order_page(self, obj: Order):
+        return f"Заказ #{obj.id}"
 
     @admin.display(description='Заказчик')
     def get_customer_name(self, obj: Order):
