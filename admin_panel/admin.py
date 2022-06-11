@@ -40,7 +40,7 @@ class OrderAdmin(admin.ModelAdmin):
         'get_order_cost',
         'created_at')
 
-    list_filter = (OrderStatusFilter,)
+    list_filter = (OrderStatusFilter, 'created_at')
 
     @admin.display(description='Заказчик')
     def get_customer_name(self, obj: Order):
